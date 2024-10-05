@@ -2,25 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Taxonomy;
 use App\Models\Term;
 use Illuminate\Http\Request;
+use Termwind\Components\Dd;
 
-class TaxonomyController extends Controller
+class TaxonomyController extends BaseController
 {
     //
 
     function index(Request $request){
-        $type = $request->query('type');
-        if($type){
-            $terms = Term::latest()->paginate(10);
-            // dd($terms);
-            $data  = [
-                'type' => $type,
-                'terms' => $terms
-            ];
-            return view('admin.single.taxonomy', $data);
-        }
-        return view('admin.taxonomies');
+
+        $pageData = $this->prepareViewData([
+            'pageName' => 'Taxonomies'
+        ]);
+        return view('admin.taxonomies' , $pageData);
+    }
+
+    function show(string $type){
+        
+        $pageData = $this->prepareViewData([
+            'pageName' => ucfirst($type)
+        ]);
+
+        $term = Taxonomy::where('slug', $type)->first();
+        $pageData['tax_data'] = $term;
+        return view('admin.single.taxonomy' ,$pageData );
     }
 }

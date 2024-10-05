@@ -8,7 +8,7 @@
                         <p>Dashboard</p>
                     </a> 
                 </li>
-                <li class="nav-item"> 
+                {{-- <li class="nav-item"> 
                     <a href="{{route('admin.products')}}" class="nav-link"> <i class="nav-icon bi bi-tag"></i>
                         <p>Products</p>
                     </a> 
@@ -22,38 +22,58 @@
                     <a href="{{route('admin.invoices')}}" class="nav-link"> <i class="nav-icon bi bi-file"></i>
                         <p>Invoices</p>
                     </a> 
-                </li>
-                <li class="nav-item"> 
-                    <a href="#" class="nav-link"> <i class="nav-icon bi bi-ui-checks-grid"></i>
-                        <p>
-                            Taxonomies
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item"> 
-                            <a href="{{route('admin.taxonomies')}}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>All</p>
-                            </a> 
-                        </li>
-                        <li class="nav-item"> 
-                            <a href="{{route('admin.taxonomies', ['type' => 'categories'])}}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Categories</p>
-                            </a> 
-                        </li>
-                        <li class="nav-item"> 
-                            <a href="{{route('admin.taxonomies', ['type' => 'brand'])}}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Brand</p>
-                            </a> 
-                        </li>
-                        <li class="nav-item"> 
-                            <a href="{{route('admin.taxonomies', ['type' => 'supplier'])}}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Seller/Supplier</p>
-                            </a> 
-                        </li>
+                </li> --}}
+                @php
+                    
+                    uasort($menus, function ($a, $b) {
+                        return $a['order'] <=> $b['order'];
+                    });
+                @endphp
+                @foreach ($menus as $key => $menu)
+                    <li class="nav-item"> 
+
+                        {{-- {{json_encode($menus)}} --}}
                         
-                    </ul>
-                </li>
+                        @if (isset($menu['children']))
+                            <a href="#" class="nav-link"> <i class="nav-icon bi bi-ui-checks-grid"></i>
+                                <p>
+                                    {{$menu['title']}}
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item"> 
+                                    <a href="{{route("admin.{$key}")}}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                                        <p>All</p>
+                                    </a> 
+                                </li>
+                                @foreach ( collect($menu['children']) as $key => $child)
+                                <li class="nav-item"> 
+                                    @php
+
+                                        $slug = array_key_first($child);
+                                        $child = reset($child);
+                                    @endphp
+
+                                    <a href="{{route('admin.taxonomies.show', ['type' =>$slug])}}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                                        
+                                        <p>{{ $child['title']}}</p>
+                                    </a> 
+                                </li>
+                                @endforeach
+                                
+                            </ul>
+                        @else
+                            <a href="{{ route("admin.{$key}") }}" class="nav-link"> <i class="nav-icon bi {{$menu['icon']}}"></i>
+                                <p>
+                                    {{$menu['title']}}
+                                </p>
+                            </a>
+                        @endif
+                    </li>
+                @endforeach
+
+                
             </ul> <!--end::Sidebar Menu-->
         </nav>
     </div> <!--end::Sidebar Wrapper-->

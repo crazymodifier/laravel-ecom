@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Taxonomy;
 use App\Models\Term;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,6 +23,14 @@ class DatabaseSeeder extends Seeder
             'password' => 'crazymodifier',
         ]);
 
-        // Term::factory(30)->create();
+        Term::factory(30)->create();
+
+        Taxonomy::factory()->count(3)->create(
+            [
+                'name' => 'Supplier',
+                'slug' => 'supplier',
+                'status' => 'publish'
+            ]
+        );
     }
 }

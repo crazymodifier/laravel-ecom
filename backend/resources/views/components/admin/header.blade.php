@@ -84,7 +84,7 @@
                     </li> <!--end::Menu Body--> <!--begin::Menu Footer-->
                     <li class="user-footer"> 
                         <a href="{{route('admin.profile')}}" class="btn btn-default btn-flat">Profile</a>
-                        <a href="{{route('admin.logout')}}" class="btn btn-default btn-flat float-end">Log out</a> 
+                        <a href="{{route('logout')}}" class="btn btn-default btn-flat float-end">Log out</a> 
                     </li> <!--end::Menu Footer-->
                 </ul>
             </li> <!--end::User Menu Dropdown-->

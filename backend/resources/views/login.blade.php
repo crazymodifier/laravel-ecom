@@ -8,7 +8,7 @@
                     <div class="card bg-light p-4">
                         <div class="card-body">
                             <h3>Login</h3><br>
-                            <form action="{{route('admin.authenticate')}}" method="post">
+                            <form action="{{route('authenticate')}}" method="post">
                                 @csrf
 
                                 <input type="email" name="email" class="w-100 form-control border-0 py-3 mb-4 @error('email') is-invalid @enderror" placeholder="Enter Your Email">

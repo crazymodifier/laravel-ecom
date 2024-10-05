@@ -2,33 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
-class ProductController extends BaseController
+class InvoiceController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        if($request->query('action')){
-            
-            $pageData = $this->prepareViewData([
-                'pageName' => 'Add Product',
-
-            ]);
-            return view('admin.single.product', $pageData);
-        }
         $pageData = $this->prepareViewData([
-                'pageName' => 'Products',
-                'pageAction' => [
-                    'title' => 'Add New',
-                    'url' => route('admin.products' , ['action' => 'new'])
-                ]
+            'pageName' => 'Invoices',
+            'pageAction' => [
+                'title' => 'Add New',
+                'url' => route('admin.invoices', ['action' => 'new'])
+            ]
         ]);
-        //
-        return view('admin.products', $pageData);
+        return view('admin.invoices' , $pageData);
+
     }
 
     /**
@@ -52,8 +44,7 @@ class ProductController extends BaseController
      */
     public function show(string $id)
     {
-        $pageData = $this->prepareViewData([]);
-        return view('admin.single.product',$pageData);
+        //
     }
 
     /**

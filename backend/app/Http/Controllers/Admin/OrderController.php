@@ -3,32 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
+use Artesaos\SEOTools\Facades\SEOTools;
 
-class ProductController extends BaseController
+class OrderController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        if($request->query('action')){
-            
-            $pageData = $this->prepareViewData([
-                'pageName' => 'Add Product',
-
-            ]);
-            return view('admin.single.product', $pageData);
-        }
         $pageData = $this->prepareViewData([
-                'pageName' => 'Products',
-                'pageAction' => [
-                    'title' => 'Add New',
-                    'url' => route('admin.products' , ['action' => 'new'])
-                ]
+            'pageName' => 'Orders',
+            'pageDescription' => 'lorem impsum',
+            'pageAction' => [
+                'title' => 'Add New',
+                'url' => route('admin.orders', ['action' => 'new'])
+            ]
         ]);
         //
-        return view('admin.products', $pageData);
+        return view('admin.orders', $pageData);
+
     }
 
     /**
@@ -52,8 +46,7 @@ class ProductController extends BaseController
      */
     public function show(string $id)
     {
-        $pageData = $this->prepareViewData([]);
-        return view('admin.single.product',$pageData);
+        //
     }
 
     /**

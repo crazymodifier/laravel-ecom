@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Term>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Taxonomy>
  */
-class TermFactory extends Factory
+class TaxonomyFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +19,6 @@ class TermFactory extends Factory
         return [
             'name' => fake()->unique()->word,
             'slug' => fake()->unique()->slug,
-            'tax_id' => fake()->randomElement([rand(1, 3)]), // Adjust range as needed
-            'parent' => fake()->randomElement([rand(1, 10)]), // Adjust range as needed
             'status' => fake()->randomElement(['publish', 'draft', 'pending', 'private']),
             'thumbnail' => fake()->imageUrl(640, 480, 'cats', true), // Random image URL
         ];
