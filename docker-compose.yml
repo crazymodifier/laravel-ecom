@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+    backend:
+        build:
+            context: ./home
+            dockerfile: Dockerfile
+        tty: true
+        environment:
+            DB_HOST: db
+            DB_DATABASE: 'laravel-app'
+            DB_USERNAME: 'root'
+            DB_PASSWORD: 'SPZ<d£58L7M3'
+        networks:
+            - app
+        ports:
+            - 8000:8000
+        volumes:
+            - ./home:/var/www/html/laravel-app/home
+        depends_on:
+            - db
+    frontend:
+        build:
+            context: ./remote
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+        volumes:
+            - ./remote:/var/www/html/laravel-app/remote
+
+        networks:
+            - app
+
+    db:
+        image: mysql
+        environment:
+            MYSQL_DATABASE: 'laravel-app'
+            MYSQL_USER: 'root'
+            MYSQL_PASSWORD: 'SPZ<d£58L7M3'
+            MYSQL_ROOT_PASSWORD: 'SPZ<d£58L7M3'
+        networks:
+            - app
+
+networks:
+    app:
+        driver: bridge
