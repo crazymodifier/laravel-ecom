@@ -15,7 +15,7 @@ Route::get('/', function () {
 //     return view('shop');
 // });
 
-Route::view('shop', 'shop');
+Route::view('shop', 'shop')->name('shop');
 
 //
 
@@ -37,9 +37,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         
-        Route::get('products/{id}', [ProductController::class, 'show'])->name('admin.products.show');
-        Route::get('products/{action}', [ProductController::class, 'indexss'])->name('admin.products.ss');
+        Route::get('products/create', [ProductController::class, 'create'])->name('admin.products.create');
         Route::get('products', [ProductController::class, 'index'])->name('admin.products');
+        Route::post('products', [ProductController::class, 'store'])->name('admin.products.store');
+        Route::get('products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+        // Route::post('products/{id}', [ProductController::class, 'update'])->name('admin.products.update');
         
         Route::get('orders', [OrderController::class, 'index'])->name('admin.orders');
         Route::get('invoices', [InvoiceController::class, 'index'])->name('admin.invoices');
@@ -51,6 +53,8 @@ Route::prefix('admin')->group(function () {
             
         Route::get('taxonomies/{type}', [TaxonomyController::class, 'show'])->name('admin.taxonomies.show');
         Route::get('taxonomies', [TaxonomyController::class, 'index'])->name('admin.taxonomies');
+
+        Route::get('terms/{id}', [ProductController::class, 'edit'])->name('admin.terms.edit');
             // Route::get('categories', [DashboardController::class, 'index'])->name('admin.taxonomies.categories');
 
         // });

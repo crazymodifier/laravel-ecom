@@ -2,29 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Admin\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        if($request->query('action')){
-            
-            $pageData = $this->prepareViewData([
-                'pageName' => 'Add Product',
-
-            ]);
-            return view('admin.single.product', $pageData);
-        }
+        
         $pageData = $this->prepareViewData([
                 'pageName' => 'Products',
                 'pageAction' => [
                     'title' => 'Add New',
-                    'url' => route('admin.products' , ['action' => 'new'])
+                    'url' => route('admin.products.create')
                 ]
         ]);
         //
@@ -36,7 +31,21 @@ class ProductController extends BaseController
      */
     public function create()
     {
-        //
+        $pageData = $this->prepareViewData([
+            'pageName' => 'Add Product',
+            'pageAction' => [
+                'title' => 'Back',
+                'url' => route('admin.products')
+            ],
+            'side_metas' => [
+                'categories'=> [
+                    'title' => 'Categories',
+                    'content' => [1,2,3]
+                ]
+            ]
+        ]);
+
+        return view('admin.single.product', $pageData);
     }
 
     /**
@@ -44,7 +53,23 @@ class ProductController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'title' => 'required',
+            'slug' => 'required',
+        ]);
+        if($validator->passes()){
+            $product = new Product();
+            $product->title = $request->title;
+            $product->slug = $request->slug;
+            $product->content = $request->content;
+            $product->save();
+            session()->flash('success', 'Product created successfuly!');
+            return redirect()->route('admin.products');
+        }else{
+            return redirect()->route('admin.products.create')
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
     }
 
     /**
@@ -52,7 +77,19 @@ class ProductController extends BaseController
      */
     public function show(string $id)
     {
-        $pageData = $this->prepareViewData([]);
+        $pageData = $this->prepareViewData([
+            'pageName' => 'Edit Product',
+            'pageAction' => [
+                'title' => 'Back',
+                'url' => route('admin.products')
+            ],
+            'side_metas' => [
+                'categories'=> [
+                    'title' => 'Categories',
+                    'content' => [1,2,3]
+                ]
+            ]
+        ]);
         return view('admin.single.product',$pageData);
     }
 
@@ -61,7 +98,20 @@ class ProductController extends BaseController
      */
     public function edit(string $id)
     {
-        //
+        $pageData = $this->prepareViewData([
+            'pageName' => 'Edit Product',
+            'pageAction' => [
+                'title' => 'Back',
+                'url' => route('admin.products')
+            ],
+            'side_metas' => [
+                'categories'=> [
+                    'title' => 'Categories',
+                    'content' => [1,2,3]
+                ]
+            ]
+        ]);
+        return view('admin.single.product',$pageData);
     }
 
     /**
