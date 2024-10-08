@@ -1,4 +1,4 @@
-<form action="{{ route("admin.{$type}.edit" , ['id' => 1]) }}" method="post" class="needs-validation @if($errors->any()) was-validated @endif">
+<form action="{{ route("admin.{$type}.{$action}" , ['id' => $content->id]) }}" method="post" class="needs-validation @if($errors->any()) was-validated @endif">
     @csrf
     <div class="row">
         <div class="col-lg-9">
@@ -66,57 +66,86 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="meta-box side mb-3">
-                <div class="card card-primary card-outline">
-                    <div class="card-header p-2">
-                        <h4 class="card-title"><strong>Product Brand</strong></h4>
-                        <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3 from-group has-validation">
-                            <label for="title" class="form-label"><b>Brand</b></label>
-                            {{
-                                html()
-                                ->select()
-                                ->name('brand')
-                                ->value(old('brand'))
-                                ->class(['form-control', $errors->has('title')? 'is-invalid':''])
-                                ->options([
-                                    '5' => 'odio',
-                                    '10' => 'ipsum',
-                                ])
-                            }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
 
             <div class="meta-box side mb-3">
                 <div class="card card-primary card-outline">
                     <div class="card-header p-2">
-                        <h4 class="card-title"><strong>Product Category</strong></h4>
+                        <h4 class="card-title"><strong>Featured Image</strong></h4>
                         <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3 from-group has-validation">
-                            <label for="title" class="form-label"><b>Category</b></label>
+                        <div class="mb-3 from-group has-validation dropzone">
+                            <div class="drop-media">
+                                <div class="dz-message needsclick">
+                                    Drag & Drop files here or click to upload
+                                </div>
+                            </div>
+                            
+                            {{-- <input type="file" name="" class="drop-media"> --}}
+                            {{-- <label for="title" class="form-label"><b>Category</b></label>
                             {{
                                 html()
                                 ->select()
-                                ->name('category')
-                                ->value(old('category'))
+                                ->multiple()
+                                ->name("taxonomies[categories][]")
+                                ->value(old("taxonomies[categories]"))
                                 ->class(['form-control', $errors->has('title')? 'is-invalid':''])
                                 ->options([
                                     '1' => 'et',
                                     '4' => 'quam',
                                 ])
-                            }}
+                            }} --}}
                         </div>
                     </div>
                 </div>
             </div>
+            <style>
+                .metawith-fixed-height{
+                    max-height: 200px;
+                    overflow-y: auto
+                }
+            </style>
+            @php
+                $oldterms = $content->terms()->pluck('term_id')->all();
+            @endphp
+            @foreach ($taxonomies as $taxonomy)
+            <div class="meta-box side mb-3">
+                <div class="card card-primary card-outline">
+                    <div class="card-header p-2">
+                        <h4 class="card-title"><strong>Product {{ucfirst($taxonomy->name)}}</strong></h4>
+                        <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                    </div>
+                    <div class="card-body">
+                        
+                            <div class="metawith-fixed-height">
+                                
+                                @foreach ($taxonomy->terms()->get() as $term)
+                                    <div class="mb-2 from-group has-validation">
+                                    {{
+                                        html()
+                                            ->checkbox("taxonomies[{$taxonomy->slug}][]" , in_array( $term->id, $oldterms ), old("taxonomies[{$taxonomy->slug}][]"))
+                                            ->attributes(['id' => "taxonomies[{$taxonomy->slug}][{$term->id}]"])
+                                            ->value($term->id)
+                                            ->class(['form-check-input'])
+
+                                    }}
+                                    {{
+                                        html()
+                                            ->label($term->name,"taxonomies[{$taxonomy->slug}][{$term->id}]")
+
+                                    }}
+                                    </div>
+                                @endforeach
+                                
+                            </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            
         </div>
     </div>
 </form>
+
+{{-- {{$content->terms('categories')->get()}} --}}

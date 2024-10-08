@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin\Product;
+use App\Models\TermRelationships;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class ProductController extends BaseController
 {
@@ -37,11 +39,8 @@ class ProductController extends BaseController
                 'title' => 'Back',
                 'url' => route('admin.products')
             ],
-            'side_metas' => [
-                'categories'=> [
-                    'title' => 'Categories',
-                    'content' => [1,2,3]
-                ]
+            'content' => [
+               
             ]
         ]);
 
@@ -53,6 +52,17 @@ class ProductController extends BaseController
      */
     public function store(Request $request)
     {
+        $terms = [];
+
+        if($request->taxonomies){
+            foreach ($request->taxonomies as $key => $value) {
+                # code...
+                foreach ($value as $term_id) {
+                    $terms[$term_id] = ['tax_slug' => $key];
+                }
+            }
+        }
+
         $validator = Validator::make($request->all(),[
             'title' => 'required',
             'slug' => 'required',
@@ -61,8 +71,9 @@ class ProductController extends BaseController
             $product = new Product();
             $product->title = $request->title;
             $product->slug = $request->slug;
-            $product->content = $request->content;
+            $product->content = $request->content;            
             $product->save();
+            $product->terms()->attach($terms);
             session()->flash('success', 'Product created successfuly!');
             return redirect()->route('admin.products');
         }else{
@@ -104,13 +115,11 @@ class ProductController extends BaseController
                 'title' => 'Back',
                 'url' => route('admin.products')
             ],
-            'side_metas' => [
-                'categories'=> [
-                    'title' => 'Categories',
-                    'content' => [1,2,3]
-                ]
+            'content' => [
+                'id' => $id
             ]
         ]);
+
         return view('admin.single.product',$pageData);
     }
 
@@ -119,7 +128,36 @@ class ProductController extends BaseController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $terms = [];
+
+        foreach ($request->taxonomies as $key => $value) {
+            # code...
+            foreach ($value as $term_id) {
+                $terms[$term_id] = ['tax_slug' => $key];
+            }
+        }
+
+        $validator = Validator::make($request->all(),[
+            'title' => 'required',
+            'slug' => 'required',
+        ]);
+        if($validator->passes()){
+            $product = Product::find($id);
+
+            $product->title = $request->title;
+            $product->slug = $request->slug;
+            $product->content = $request->content;
+
+            $product->terms()->sync($terms,true);
+           
+            $product->save();
+            session()->flash('success', 'Product updated successfuly!');
+            return redirect()->route('admin.products');
+        }else{
+            return redirect()->route('admin.products.create')
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
     }
 
     /**

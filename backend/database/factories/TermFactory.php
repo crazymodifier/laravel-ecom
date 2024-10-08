@@ -20,7 +20,7 @@ class TermFactory extends Factory
             'name' => fake()->unique()->word,
             'slug' => fake()->unique()->slug,
             'tax_id' => fake()->randomElement([rand(1, 3)]), // Adjust range as needed
-            'parent' => fake()->randomElement([rand(1, 10)]), // Adjust range as needed
+            // 'parent' => fake()->randomElement([rand(1, 10)]), // Adjust range as needed
             'status' => fake()->randomElement(['publish', 'draft', 'pending', 'private']),
             'thumbnail' => fake()->imageUrl(640, 480, 'cats', true), // Random image URL
         ];

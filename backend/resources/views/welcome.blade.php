@@ -1,5 +1,7 @@
 @extends('layouts.page')
-
+@section('navbar')
+    <x-public.menu />
+@endsection
 @section('content')
     
     <!-- Hero Start -->

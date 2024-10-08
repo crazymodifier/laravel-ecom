@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Http\Request;
+use Artesaos\SEOTools\Facades\SEOTools;
+
 
 class BaseController extends Controller
 {

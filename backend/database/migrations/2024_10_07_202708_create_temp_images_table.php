@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('taxonomies', function (Blueprint $table) {
+        Schema::create('temp_images', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique(); // Ensure the slug is unique
-            $table->string('thumbnail')->nullable(); // Make thumbnail nullable if not required
-            $table->string('status')->default('active'); // Default status
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taxonomies');
+        Schema::dropIfExists('temp_images');
     }
 };

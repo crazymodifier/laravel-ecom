@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Taxonomy;
 use App\Models\Term;
+use App\Models\TermRelationships;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,14 +24,19 @@ class DatabaseSeeder extends Seeder
             'password' => 'crazymodifier',
         ]);
 
-        Term::factory(30)->create();
+        // Term::factory(30)->create();
 
-        Taxonomy::factory()->count(3)->create(
-            [
-                'name' => 'Supplier',
-                'slug' => 'supplier',
-                'status' => 'publish'
-            ]
-        );
+        // Taxonomy::factory()->create(
+        //         [
+        //             'name' => 'Suppliers',
+        //             'slug' => 'suppliers',
+        //             'status' => 'publish'
+        //         ]
+        //     )->each(function ($taxonomy) {
+        //         // Create 3 terms for each taxonomy
+        //         Term::factory(15)->create(['tax_id' => $taxonomy->id]);
+        //     });
+
+        // TermRelationships::factory(10)->create();
     }
 }

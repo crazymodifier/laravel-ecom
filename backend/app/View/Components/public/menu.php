@@ -1,20 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\public;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class LoopItem extends Component
+class menu extends Component
 {
-    public $item;
     /**
      * Create a new component instance.
      */
-    public function __construct($item )
+    public function __construct()
     {
-        $this->item = $item;
+        //
     }
 
     /**
@@ -22,6 +21,6 @@ class LoopItem extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.loop-item');
+        return view('components.public.menu');
     }
 }
