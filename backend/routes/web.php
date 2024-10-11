@@ -38,7 +38,7 @@ Route::prefix('admin')->group(function () {
     
 
     Route::group(['middleware' => 'auth'] , function() {
-        Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('admin');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         
         Route::get('products/create', [ProductController::class, 'create'])->name('admin.products.create');

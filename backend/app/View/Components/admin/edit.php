@@ -30,8 +30,6 @@ class edit extends Component
         $this->content = match ($type) {
             'terms' => isset($content['id']) ? Term::find( $content['id'] ) : new Term(),
             'products' => isset($content['id']) ? Product::find( $content['id'] ) : new Product(),
-            // 'orders' => Order::latest()->paginate(10),
-            // 'invoices' => Invoice::latest()->paginate(10),
             default => collect(),
         };
     }
